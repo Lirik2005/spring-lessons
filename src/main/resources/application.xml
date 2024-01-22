@@ -8,9 +8,8 @@
         <constructor-arg type="java.lang.String" value="PostgresDriver"/>
     </bean>
 
-    <!-- С помощью атрибута value-ref мы положили в нашу Map другой бин. А атрубут ref также позволяет положить в наш лист другой бин. То
-     есть мы ссылаемся на другую сущность. То же самое и для обычного бина (например, username): мы можем вместо value указать ref и
-     сослаться на другой бин-->
+    <!-- С помощью атрибута property мы можем использовать setter для заполнения поля. Пригодится, если момент заполнения конструктора
+    есть какой-то Map (в конструктор вместо Map мы просто отдали null). Ну или Map вообще не входит в конструктор (тогда и null не надо)-->
     <bean id="pool1" name="p1, first" class="org.example.database.pool.ConnectionPool">
         <constructor-arg index="0" name="username" type="java.lang.String" ref="driver"/>
         <constructor-arg index="1" name="poolSize" type="int" value="10"/>
@@ -22,12 +21,15 @@
             </list>
         </constructor-arg>
         <constructor-arg index="3" name="properties" type="java.util.Map">
+            <null/>
+        </constructor-arg>
+        <property name="properties">
             <map>
                 <entry key="url" value="postgresurl"/>
                 <entry key="password" value="123"/>
                 <entry key="driver" value-ref="driver"/>
             </map>
-        </constructor-arg>
+        </property>
     </bean>
 
     <!-- Создали бин companyRepository и сослались на бин с id = pool1, используя фабричный метод of, в который передали ConnectionPool-->
