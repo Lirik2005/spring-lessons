@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- так вызывается конструктор без параметров. Id нам необходим, чтобы мы могли обращаться к конкретному бину. Name это тоже для
+    обращения к бину, только может иметь несколько значений, перечисленных через запятую (обращаться можно как удобно). И id и name у
+    бинов должны быть уникальны-->
+    <bean id="pool1" name="p1, first" class="org.example.database.pool.ConnectionPool"/>
+    <bean id="pool2" name="p2, second" class="org.example.database.pool.ConnectionPool"/>
+
+</beans>
