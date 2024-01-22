@@ -13,7 +13,7 @@ public class ApplicationRunner {
          * Запись context.getBean(ConnectionPool.class) мы не можем использовать, если у нас есть несколько бинов одного и того же класса.
          * Поэтому для обращения к конкретному бину используем запись ниже, а именно через id бина
          */
-        ConnectionPool connectionPool = context.getBean("second", ConnectionPool.class);
+        ConnectionPool connectionPool = context.getBean("first", ConnectionPool.class);
         System.out.println(connectionPool);
     }
 }
