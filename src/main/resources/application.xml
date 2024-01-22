@@ -29,6 +29,7 @@
             </map>
         </constructor-arg>
     </bean>
+
     <!-- Создали бин companyRepository и сослались на бин с id = pool1, используя фабричный метод of, в который передали ConnectionPool-->
     <bean id="companyRepository" class="org.example.database.repository.CompanyRepository" factory-method="of">
         <constructor-arg ref="pool1"/>
