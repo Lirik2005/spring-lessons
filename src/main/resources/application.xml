@@ -3,27 +3,34 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- Когда у сущности имеется конструктор, то работаем мы с ним так, как показано ниже. В данном случае, главное отдавать параметры
-    ровно в той последовательности, в которой они указаны в конструкторе (username, poolSize, args, properties).
-    Однако, с помощью значения index мы можем указать порядковый номер параметра из конструктора и тогда нам не надо соблюдать строгий
-    порядок аргументов.
-    Аргумент type позволяет еще больше себя обезопасить, указав тип того или иного аргумента
-    Также можно использовать атрибут name и указать явно название поля. Тогда нам не надо index-->
+    <!-- В бине driver мы вызываем конкретный конструктор класса String, который на вход просит строку-->
+    <bean id="driver" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="PostgresDriver"/>
+    </bean>
+
+    <!-- С помощью атрибута value-ref мы положили в нашу Map другой бин. А атрубут ref также позволяет положить в наш лист другой бин. То
+     есть мы ссылаемся на другую сущность. То же самое и для обычного бина (например, username): мы можем вместо value указать ref и
+     сослаться на другой бин-->
     <bean id="pool1" name="p1, first" class="org.example.database.pool.ConnectionPool">
-        <constructor-arg index="0" name="username" type="java.lang.String" value="postgres"/>
-        <constructor-arg index="1" name="poolSize" type="java.lang.Integer" value="10"/>
+        <constructor-arg index="0" name="username" type="java.lang.String" ref="driver"/>
+        <constructor-arg index="1" name="poolSize" type="int" value="10"/>
         <constructor-arg index="2" name="args" type="java.util.List">
             <list>
                 <value>--arg1=value1</value>
                 <value>--arg2=value2</value>
+                <ref bean="driver"/>
             </list>
         </constructor-arg>
         <constructor-arg index="3" name="properties" type="java.util.Map">
             <map>
                 <entry key="url" value="postgresurl"/>
                 <entry key="password" value="123"/>
+                <entry key="driver" value-ref="driver"/>
             </map>
         </constructor-arg>
     </bean>
-
+    <!-- Создали бин companyRepository и сослались на бин с id = pool1, используя фабричный метод of, в который передали ConnectionPool-->
+    <bean id="companyRepository" class="org.example.database.repository.CompanyRepository" factory-method="of">
+        <constructor-arg ref="pool1"/>
+    </bean>
 </beans>
