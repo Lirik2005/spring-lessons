@@ -11,7 +11,7 @@
     Также можно использовать атрибут name и указать явно название поля. Тогда нам не надо index-->
     <bean id="pool1" name="p1, first" class="org.example.database.pool.ConnectionPool">
         <constructor-arg index="0" name="username" type="java.lang.String" value="postgres"/>
-        <constructor-arg index="1" name="poolSize" type="java.lang.Integer" value="10"/>
+        <constructor-arg index="1" name="poolSize" type="int" value="10"/>
         <constructor-arg index="2" name="args" type="java.util.List">
             <list>
                 <value>--arg1=value1</value>
