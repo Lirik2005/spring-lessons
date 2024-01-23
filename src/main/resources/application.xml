@@ -8,9 +8,11 @@
         <constructor-arg type="java.lang.String" value="PostgresDriver"/>
     </bean>
 
-    <!-- С помощью атрибута property мы можем использовать setter для заполнения поля. Пригодится, если момент заполнения конструктора
-    есть какой-то Map (в конструктор вместо Map мы просто отдали null). Ну или Map вообще не входит в конструктор (тогда и null не надо)-->
-    <bean id="pool1" name="p1, first" class="org.example.database.pool.ConnectionPool">
+    <!-- С помощью атрибута scope мы можем решать использовать ли один и тот же бин (будет лежать в application context), либо каждый раз
+    создавать новый. По умолчанию все бины это singleton. Если указать prototype, то каждый раз у нас будет новый бин
+    В таком варианте у нас бин из строки ниже и бин для CompanyRepository будут разные (запусти дебаг и увидишь, что ConnectionPool
+    разные)-->
+    <bean id="pool1" name="p1, first" class="org.example.database.pool.ConnectionPool" scope="prototype">
         <constructor-arg index="0" name="username" type="java.lang.String" ref="driver"/>
         <constructor-arg index="1" name="poolSize" type="int" value="10"/>
         <constructor-arg index="2" name="args" type="java.util.List">
