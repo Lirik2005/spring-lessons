@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-    <!-- В бине driver мы вызываем конкретный конструктор класса String, который на вход просит строку-->
+    <!-- Используется для работы с файлом application.properties-->
+    <context:property-placeholder location="application.properties"/>
+
+    <!-- Бин PropertySourcesPlaceholderConfigurer используется для работы с файлом application.properties Однако сейчас так не делают и
+    надо лишь подправить xml-шапку-->
+    <!--  <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+          <property name="location" value="application.properties"/>
+      </bean>-->
+
+    <!-- Для заполнения value мы используем expression language и указываем на ключ из нашего application.properties-->
     <bean id="driver" class="java.lang.String">
-        <constructor-arg type="java.lang.String" value="PostgresDriver"/>
+        <constructor-arg type="java.lang.String" value="${db.driver}"/>
     </bean>
 
-    <!-- С помощью атрибута init-method мы можем проинициализировать все наши Connections, то есть создать pool соответствующего размера
-    (в данном случае у нас poolSize равен 10 элементам
-    С помощью атрибута destroy-method позволит нам закрыть наши 10 соединений с ConnectionPool, когда application context закрывается-->
     <bean id="pool1" name="p1, first" class="org.example.database.pool.ConnectionPool"
           init-method="init"
-    destroy-method="destroy">
-        <constructor-arg index="0" name="username" type="java.lang.String" ref="driver"/>
-        <constructor-arg index="1" name="poolSize" type="int" value="10"/>
+          destroy-method="destroy">
+        <constructor-arg index="0" name="username" type="java.lang.String" value="${db.username}"/>
+        <constructor-arg index="1" name="poolSize" type="int" value="${db.pool.size}"/>
         <constructor-arg index="2" name="args" type="java.util.List">
             <list>
                 <value>--arg1=value1</value>
@@ -28,9 +38,15 @@
         </constructor-arg>
         <property name="properties">
             <map>
+
+                <!-- С помощью решетки мы вызываем spring expression language и уже можем писать код как в java -->
                 <entry key="url" value="postgresurl"/>
                 <entry key="password" value="123"/>
-                <entry key="driver" value-ref="driver"/>
+                <entry key="driver" value="#{driver.substring(3)}"/>
+                <entry key="test" value="#{driver.length()>10}"/>
+                <entry key="test1" value="#{driver.length()>T(Math).random()*10}"/>
+                <entry key="hosts" value="#{'${db.hosts}'.split(',')}"/>
+                <entry key="currentuser" value="#{systemEnvironment['user.name']}"/>
             </map>
         </property>
     </bean>

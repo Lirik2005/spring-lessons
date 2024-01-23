@@ -23,7 +23,7 @@ public class ApplicationRunner {
             System.out.println(connectionPool);
 
             CompanyRepository companyRepository = context.getBean("companyRepository", CompanyRepository.class);
-            System.out.println(companyRepository);
+             System.out.println(companyRepository);
         }
     }
 }
