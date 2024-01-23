@@ -7,8 +7,15 @@
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
+    <!-- Используется для работы с аннотациями @PostConstruct и @PreDestroy-->
+    <context:annotation-config/>
+
     <!-- Используется для работы с файлом application.properties-->
     <context:property-placeholder location="application.properties"/>
+
+    <!-- Данный бин нужен, чтобы заработали аннотации @PostConstruct и @PreDestroy
+    Но лучше использовать <context:annotation-config/>-->
+<!--    <bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"/>-->
 
     <!-- Бин PropertySourcesPlaceholderConfigurer используется для работы с файлом application.properties Однако сейчас так не делают и
     надо лишь подправить xml-шапку-->
@@ -21,9 +28,7 @@
         <constructor-arg type="java.lang.String" value="${db.driver}"/>
     </bean>
 
-    <bean id="pool1" name="p1, first" class="org.example.database.pool.ConnectionPool"
-          init-method="init"
-          destroy-method="destroy">
+    <bean id="pool1" name="p1, first" class="org.example.database.pool.ConnectionPool">
         <constructor-arg index="0" name="username" type="java.lang.String" value="${db.username}"/>
         <constructor-arg index="1" name="poolSize" type="int" value="${db.pool.size}"/>
         <constructor-arg index="2" name="args" type="java.util.List">
