@@ -55,4 +55,7 @@
     <bean id="companyRepository" class="org.example.database.repository.CompanyRepository" factory-method="of">
         <constructor-arg ref="pool1"/>
     </bean>
+
+    <bean class="org.example.bfpp.LogBeanFactoryPostProcessor"/>
+    <bean class="org.example.bfpp.VerifyPropertyBeanFactoryPostProcessor"/>
 </beans>
