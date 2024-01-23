@@ -8,16 +8,22 @@ public class ApplicationRunner {
 
     public static void main(String[] args) {
 
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
-
         /**
-         * Запись context.getBean(ConnectionPool.class) мы не можем использовать, если у нас есть несколько бинов одного и того же класса.
-         * Поэтому для обращения к конкретному бину используем запись ниже, а именно через id бина
+         * Оборачиваем в try with resources, чтобы application context автоматически закрывался
          */
-        ConnectionPool connectionPool = context.getBean("first", ConnectionPool.class);
-        System.out.println(connectionPool);
 
-        CompanyRepository companyRepository = context.getBean("companyRepository", CompanyRepository.class);
-        System.out.println(companyRepository);
+        try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml")) {
+
+            /**
+             * Запись context.getBean(ConnectionPool.class) мы не можем использовать, если у нас есть несколько бинов одного и того же
+             * класса.
+             * Поэтому для обращения к конкретному бину используем запись ниже, а именно через id бина
+             */
+            ConnectionPool connectionPool = context.getBean("first", ConnectionPool.class);
+            System.out.println(connectionPool);
+
+            CompanyRepository companyRepository = context.getBean("companyRepository", CompanyRepository.class);
+            System.out.println(companyRepository);
+        }
     }
 }
