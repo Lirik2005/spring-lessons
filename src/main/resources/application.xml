@@ -13,6 +13,10 @@
     <!-- Используется для работы с файлом application.properties-->
     <context:property-placeholder location="application.properties"/>
 
+    <bean class="org.example.bpp.InjectBeanPostProcessor"/>
+    <bean class="org.example.bpp.TransactionBeanPostProcessor"/>
+    <bean class="org.example.bpp.AuditingTransactionBeanPostProcessor"/>
+
     <!-- Данный бин нужен, чтобы заработали аннотации @PostConstruct и @PreDestroy
     Но лучше использовать <context:annotation-config/>-->
 <!--    <bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"/>-->
@@ -56,10 +60,7 @@
         </property>
     </bean>
 
-    <!-- Создали бин companyRepository и сослались на бин с id = pool1, используя фабричный метод of, в который передали ConnectionPool-->
-    <bean id="companyRepository" class="org.example.database.repository.CompanyRepository" factory-method="of">
-        <constructor-arg ref="pool1"/>
-    </bean>
+    <bean id="companyRepository" class="org.example.database.repository.CompanyRepository"/>
 
     <bean class="org.example.bfpp.LogBeanFactoryPostProcessor"/>
     <bean class="org.example.bfpp.VerifyPropertyBeanFactoryPostProcessor"/>
