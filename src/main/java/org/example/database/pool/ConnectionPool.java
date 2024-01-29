@@ -16,10 +16,13 @@ import java.util.Map;
  */
 public class ConnectionPool implements InitializingBean {
 
-    private final String username;
-    private final int poolSize;
-    private final List<Object> args;
+    private String username;
+    private int poolSize;
+    private List<Object> args;
     private Map<String, Object> properties;
+
+    public ConnectionPool() {
+    }
 
     public ConnectionPool(String username,
                           int poolSize,
