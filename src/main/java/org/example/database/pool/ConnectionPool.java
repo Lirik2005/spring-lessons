@@ -1,41 +1,30 @@
 package org.example.database.pool;
 
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.util.List;
-import java.util.Map;
 
 /**
- * Интерфейс InitializingBean также позволяет нам докрутить наш бин также, как и метод init(). При этом сначала вызовется метод
- * afterPropertiesSet() и только потом метод init(). Использование данного интерфейса является нежелательным, так как нарушается
- * inversion of control. В данном случае лучше всего использовать init(). А еще лучше использовать аннотацию @PostConstruct.
- * Вызываться это все будет в следующей последовательности: сначала @PostConstruct, потом интерфейс InitializingBean и в конце метод init().
- * Методы init() и afterPropertiesSet() - методы инициализации (должны быть void и не принимать никаких параметров).
+ * Аннотация @Component используется для того, чтобы аннотация @Autowired могла создать бин данного класса. Если в аннотации @Component
+ * не указать value (которое в скобках), то id бина будет соответствовать названию класса.
  */
-public class ConnectionPool implements InitializingBean {
 
-    private String username;
-    private int poolSize;
-    private List<Object> args;
-    private Map<String, Object> properties;
+@Component("pool1")
+public class ConnectionPool {
 
-    public ConnectionPool() {
-    }
+    private final String username;
+    private final Integer poolSize;
 
-    public ConnectionPool(String username,
-                          int poolSize,
-                          List<Object> args,
-                          Map<String, Object> properties) {
+    /**
+     * Здесь над конструктором мы не ставим @Autowired, так как он будет вызван автоматически. Явно указывать аннотацию над конструктором
+     * надо тогда, когда в классе имеется несколько конструкторов!!!
+     */
+    public ConnectionPool(@Value("${db.username}") String username,
+                          @Value("${db.pool.size}") Integer poolSize) {
         this.username = username;
         this.poolSize = poolSize;
-        this.args = args;
-        this.properties = properties;
-    }
-
-    public void setProperties(Map<String, Object> properties) {
-        this.properties = properties;
     }
 
     /**
@@ -44,11 +33,6 @@ public class ConnectionPool implements InitializingBean {
     @PostConstruct
     private void init() {
         System.out.println("Init connection pool");
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        System.out.println("Properties set");
     }
 
     /**

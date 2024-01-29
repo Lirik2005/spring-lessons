@@ -19,7 +19,7 @@ public class ApplicationRunner {
              * класса.
              * Поэтому для обращения к конкретному бину используем запись ниже, а именно через id бина
              */
-            ConnectionPool connectionPool = context.getBean("first", ConnectionPool.class);
+            ConnectionPool connectionPool = context.getBean("pool1", ConnectionPool.class);
             System.out.println(connectionPool);
 
             var companyRepository = context.getBean("companyRepository", CrudRepository.class);
