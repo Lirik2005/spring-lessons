@@ -8,10 +8,10 @@
                            http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
     <!-- Используется для работы с файлом application.properties-->
-    <context:property-placeholder location="application.properties"/>
+<!--    <context:property-placeholder location="application.properties"/>-->
 
     <!--Данная запись нужна, чтобы искать аннотацию @Component и создания бинов-->
-    <context:component-scan base-package="org.example"/>
+<!--    <context:component-scan base-package="org.example"/>-->
 
     <!-- Данный бин нужен, чтобы заработали аннотации @PostConstruct и @PreDestroy
     Но лучше использовать <context:annotation-config/>-->

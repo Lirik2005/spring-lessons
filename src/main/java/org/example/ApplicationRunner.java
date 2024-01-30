@@ -1,8 +1,9 @@
 package org.example;
 
+import org.example.config.ApplicationConfiguration;
 import org.example.database.pool.ConnectionPool;
 import org.example.database.repository.CrudRepository;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class ApplicationRunner {
 
@@ -12,7 +13,7 @@ public class ApplicationRunner {
          * Оборачиваем в try with resources, чтобы application context автоматически закрывался
          */
 
-        try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml")) {
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class)) {
 
             /**
              * Запись context.getBean(ConnectionPool.class) мы не можем использовать, если у нас есть несколько бинов одного и того же
