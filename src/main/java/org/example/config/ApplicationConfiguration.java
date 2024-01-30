@@ -4,17 +4,25 @@ import org.example.database.repository.CrudRepository;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
+import org.web.config.WebConfiguration;
 
-import static org.springframework.context.annotation.ComponentScan.*;
+import static org.springframework.context.annotation.ComponentScan.Filter;
 
 /**
  * Аннотация @Configuration позволяет нам подключать какие-либо конфигурации к приложению. Позволяет отказаться от application.xml.
  * Теперь все настройки делаем тут.
  * Аннотация @PropertySource("classpath:application.properties") нужна для доступа к нашему application.properties.
  * Аннотация @ComponentScan необходима для поиска наших аннотаций @Component или фильтров.
+ * Аннотация @ImportResource("classpath:application.xml") позволяет комбинировать Java-Based configuration и XML-Based configuration.
+ * Однако, на практике такое не используется!!!
+ * Аннотация @Import() используется для подключения других классов конфигурации.
  */
+
+//@ImportResource("classpath:application.xml")
+@Import(WebConfiguration.class) // Наш скан не сканирует этот пакет, а аннотация позволяет получать конфигурации
 @Configuration
 @PropertySource("classpath:application.properties")
 @ComponentScan(basePackages = "org.example",
