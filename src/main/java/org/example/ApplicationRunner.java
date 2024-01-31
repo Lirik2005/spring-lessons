@@ -13,7 +13,15 @@ public class ApplicationRunner {
          * Оборачиваем в try with resources, чтобы application context автоматически закрывался
          */
 
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class)) {
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+
+            /**
+             * Записи ниже нужны для активации наших профайлов. Вызов context.refresh() это обязательно!!!
+             * Лучше всего вызывать profile из application.properties!!!
+             */
+            context.register(ApplicationConfiguration.class);
+            context.getEnvironment().setActiveProfiles("web", "prod");
+            context.refresh();
 
             /**
              * Запись context.getBean(ConnectionPool.class) мы не можем использовать, если у нас есть несколько бинов одного и того же

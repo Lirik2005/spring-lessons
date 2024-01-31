@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.web.config.WebConfiguration;
@@ -54,7 +55,16 @@ public class ApplicationConfiguration {
         return new ConnectionPool("test-pool", 25);
     }
 
+    /**
+     * Аннотация @Profile используется для того, что указать когда будет использоваться указанный бин. В данном случае мы указали, что
+     * бин userRepository2 появится только в продакшене или web-приложении.
+     * Активировать профайлы мы можем, например, через application.properties.
+     * Также можно активировать профайл через контекст (тут надо смотреть ApplicationRunner.class).
+     * Лучше всего вызывать profile из application.properties!!!
+     */
+
     @Bean
+    @Profile("prod | web") //тут можно использовать логические операторы ! (не), & (и), | (или)
     public UserRepository userRepository2(ConnectionPool pool2) {
         return new UserRepository(pool2);
     }
