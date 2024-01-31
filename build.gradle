@@ -12,6 +12,7 @@ repositories {
 dependencies {
     implementation 'org.springframework:spring-core:5.3.13'
     implementation 'org.springframework:spring-context:5.3.13'
+    implementation 'org.postgresql:postgresql:42.3.1'
 
     /**
      * Зависимость 'jakarta.annotation:jakarta.annotation-api:1.3.5' - это спецификация JSR-250 для аннотаций @PostConstruct, @PreDestroy и

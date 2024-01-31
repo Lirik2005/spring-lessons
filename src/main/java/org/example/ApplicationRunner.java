@@ -2,7 +2,6 @@ package org.example;
 
 import org.example.config.ApplicationConfiguration;
 import org.example.database.pool.ConnectionPool;
-import org.example.database.repository.CrudRepository;
 import org.example.service.CompanyService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -32,7 +31,7 @@ public class ApplicationRunner {
             ConnectionPool connectionPool = context.getBean("pool1", ConnectionPool.class);
             System.out.println(connectionPool);
 
-            var companyService = context.getBean( CompanyService.class);
+            var companyService = context.getBean(CompanyService.class);
             System.out.println(companyService.findById(1));
         }
     }
