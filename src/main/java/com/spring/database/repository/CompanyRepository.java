@@ -4,6 +4,7 @@ import com.spring.bpp.Auditing;
 import com.spring.bpp.Transaction;
 import com.spring.database.entity.Company;
 import com.spring.database.pool.ConnectionPool;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
 @Repository
 @Transaction
 @Auditing
+@RequiredArgsConstructor
 public class CompanyRepository implements CrudRepository<Integer, Company> {
 
     /**
@@ -34,18 +36,12 @@ public class CompanyRepository implements CrudRepository<Integer, Company> {
 
     private final List<ConnectionPool> pools;
 
-    private final Integer poolSize;
-
     /**
      * Аннотация @Value позволяет заинжектить поля из application.properties, используя Spring Expression Language
      */
-    public CompanyRepository(ConnectionPool pool1,
-                             List<ConnectionPool> pools,
-                             @Value("${db.pool.size}") Integer poolSize) {
-        this.pool1 = pool1;
-        this.pools = pools;
-        this.poolSize = poolSize;
-    }
+
+    @Value("${db.pool.size}")
+    private final Integer poolSize;
 
     @PostConstruct
     private void init() {
