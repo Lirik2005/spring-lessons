@@ -1,4 +1,4 @@
-db:
+database:
   username: ${username.value:postgres}
   password: 123
   driver: PostgresDriver
@@ -14,4 +14,9 @@ db:
       timeout: 2
     - size: 3
       timeout: 3
-#spring.profiles.active: qa
+  properties:
+    first: 123
+    second: 567
+    third.value: Third
+
+spring.profiles.active: qa
