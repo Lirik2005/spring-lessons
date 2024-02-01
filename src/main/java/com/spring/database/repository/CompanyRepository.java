@@ -5,6 +5,7 @@ import com.spring.bpp.Transaction;
 import com.spring.database.entity.Company;
 import com.spring.database.pool.ConnectionPool;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +18,7 @@ import java.util.Optional;
  * Аннотация @Repository (внутри помечена как @Component) это аналог аннотации @Component и используется над уровнем репозиторием
  */
 
+@Slf4j
 @Repository
 @Transaction
 @Auditing
@@ -40,12 +42,12 @@ public class CompanyRepository implements CrudRepository<Integer, Company> {
      * Аннотация @Value позволяет заинжектить поля из application.properties, используя Spring Expression Language
      */
 
-    @Value("${db.pool.size}")
+    @Value("${database.pool.size}")
     private final Integer poolSize;
 
     @PostConstruct
     private void init() {
-        System.out.println("Init company repository");
+        log.warn("Init company repository");
     }
 
     @Override

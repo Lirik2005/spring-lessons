@@ -26,7 +26,7 @@ public class ApplicationConfiguration {
      * С помощью аннотации @Value мы можем в бин сразу инжектить другой бин.
      */
     @Bean
-    public ConnectionPool pool2(@Value("${db.username}") String username) {
+    public ConnectionPool pool2(@Value("${database.username}") String username) {
         return new ConnectionPool(username, 20);
     }
 

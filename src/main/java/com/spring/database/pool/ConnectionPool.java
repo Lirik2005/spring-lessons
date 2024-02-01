@@ -1,6 +1,7 @@
 package com.spring.database.pool;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,14 +13,15 @@ import javax.annotation.PreDestroy;
  * не указать value (которое в скобках), то id бина будет соответствовать названию класса.
  */
 
+@Slf4j
 @Component("pool1")
 @RequiredArgsConstructor
 public class ConnectionPool {
 
-    @Value("${db.username}")
+    @Value("${database.username}")
     private final String username;
 
-    @Value("${db.pool.size}")
+    @Value("${database.pool.size}")
     private final Integer poolSize;
 
     /**
@@ -27,7 +29,7 @@ public class ConnectionPool {
      */
     @PostConstruct
     private void init() {
-        System.out.println("Init connection pool");
+        log.info("Init connection pool");
     }
 
     /**
@@ -35,6 +37,6 @@ public class ConnectionPool {
      */
     @PreDestroy
     private void destroy() {
-        System.out.println("Clean connection pool");
+        log.info("Clean connection pool");
     }
 }

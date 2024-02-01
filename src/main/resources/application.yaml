@@ -20,3 +20,10 @@ database:
     third.value: Third
 
 spring.profiles.active: qa
+
+# Тут мы указываем уровни логирования. ПО умолчанию мы задали уровень WARN, но для класса ConnectionPool мы поставили INFO. В результате
+# мы будем видеть все сообщения WARN и сообщения INFO из класса ConnectionPool. Также можно задать и для пакета целиком.
+logging:
+  level:
+    root: WARN
+    com.spring.database.pool.ConnectionPool: INFO
