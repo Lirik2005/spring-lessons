@@ -23,7 +23,13 @@ spring.profiles.active: qa
 
 # Тут мы указываем уровни логирования. ПО умолчанию мы задали уровень WARN, но для класса ConnectionPool мы поставили INFO. В результате
 # мы будем видеть все сообщения WARN и сообщения INFO из класса ConnectionPool. Также можно задать и для пакета целиком.
+# С помощью атрибута file мы сохраняем логи в файл с названием testLog.log (может быть любым), который будет в данном случае лежать рутовой
+# директории проекта
+# Если в поле root указать OFF, то ни один уровень логирования не будет отражен.
 logging:
   level:
     root: WARN
     com.spring.database.pool.ConnectionPool: INFO
+  file:
+    name: testLog.log
+    path: /

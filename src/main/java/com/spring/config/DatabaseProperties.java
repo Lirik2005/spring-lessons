@@ -31,8 +31,8 @@ public record DatabaseProperties(String username,
                                  Map<String, Object> properties) {
 
 
-    public static record PoolProperties(Integer size,
-                                        Integer timeout) {
+    public record PoolProperties(Integer size,
+                                 Integer timeout) {
 
     }
 }
