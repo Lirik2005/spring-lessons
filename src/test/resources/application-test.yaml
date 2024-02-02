@@ -1,0 +1,7 @@
+# Файл application-test.yaml еам нужен для передачи каких-то настроек непосредственно в тест. Для работы с ним надо над тестовым классом
+# поставить аннотацию @ActiveProfiles("test"). Это значит, что сейчас мы смотрим на resource из пакета test
+
+database:
+  username: test
+  password: test
+
