@@ -29,10 +29,9 @@ spring:
     password: pass
     driver-class-name: org.postgresql.Driver
   jpa:
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+    properties.hibernate:
+      show_sql: true
+      format_sql: true
 
 
 # Тут мы указываем уровни логирования. ПО умолчанию мы задали уровень WARN, но для класса ConnectionPool мы поставили INFO. В результате

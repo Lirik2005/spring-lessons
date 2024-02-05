@@ -4,10 +4,12 @@ import com.spring.database.pool.ConnectionPool;
 import com.spring.database.repository.UserRepository;
 import com.web.config.WebConfiguration;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Scope;
 
 /**
  * Аннотация @Configuration позволяет нам подключать какие-либо конфигурации к приложению. Позволяет отказаться от application.xml.
@@ -16,7 +18,7 @@ import org.springframework.context.annotation.Profile;
  */
 
 @Import(WebConfiguration.class) // Наш скан не сканирует этот пакет, а аннотация позволяет получать конфигурации
-@Configuration
+@Configuration(proxyBeanMethods = true)
 public class ApplicationConfiguration {
 
     /**
@@ -25,7 +27,8 @@ public class ApplicationConfiguration {
      * Также над методом аннотацию @Scope, чтобы создавать не синглтон-бин, а каждый раз новый бин.
      * С помощью аннотации @Value мы можем в бин сразу инжектить другой бин.
      */
-    @Bean
+    @Bean("pool2")
+    @Scope(BeanDefinition.SCOPE_SINGLETON)
     public ConnectionPool pool2(@Value("${database.username}") String username) {
         return new ConnectionPool(username, 20);
     }
