@@ -1,7 +1,6 @@
 package com.spring.service;
 
-import com.spring.database.entity.Company;
-import com.spring.database.repository.CrudRepository;
+import com.spring.database.repository.CompanyRepository;
 import com.spring.database.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,5 +17,5 @@ public class UserService {
     /**
      * Здесь используем CrudRepository так как CompanyRepository у нас прокси.
      */
-    private final CrudRepository<Integer, Company> companyRepository;
+    private final CompanyRepository companyRepository;
 }

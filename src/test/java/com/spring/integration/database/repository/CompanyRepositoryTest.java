@@ -1,19 +1,19 @@
 package com.spring.integration.database.repository;
 
 import com.spring.database.entity.Company;
+import com.spring.database.repository.CompanyRepository;
 import com.spring.integration.annotation.IT;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.annotation.Commit;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.EntityManager;
-
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Аннотация @Transactional нужна для управления транзакцией. Если ее убрать, то тест упадет, так как не сможет получить данные о locales.
@@ -26,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @RequiredArgsConstructor
 class CompanyRepositoryTest {
 
+    private static final Integer APPLE_ID = 11;
+
     private final EntityManager entityManager;
 
     /**
@@ -34,6 +36,17 @@ class CompanyRepositoryTest {
      */
 
     private final TransactionTemplate transactionTemplate;
+
+    private final CompanyRepository companyRepository;
+
+    @Test
+    void delete() {
+        Optional<Company> maybeCompany = companyRepository.findById(APPLE_ID);
+        assertTrue(maybeCompany.isPresent());
+        maybeCompany.ifPresent(entity -> companyRepository.delete(entity));
+        entityManager.flush(); // метод delete вызовется только после коммита транзакции или явного вызова метода flush()
+        assertTrue(companyRepository.findById(APPLE_ID).isEmpty());
+    }
 
     @Test
     void findById() {
