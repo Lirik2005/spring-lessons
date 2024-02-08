@@ -25,6 +25,7 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
     /**
      * Метод ниже также поставляется нам из коробки и позволит нам вернуть List компаний по части их названия. ЕГо просто надо написать как
      * ниже и все заведется.
+     * Однако в таком случае, название метода получается довольно большим и громоздким, что не есть хорошо.
      */
     List<Company> findALlByNameContainingIgnoreCase(String fragment);
 }
