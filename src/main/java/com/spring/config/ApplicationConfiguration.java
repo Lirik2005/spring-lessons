@@ -45,19 +45,4 @@ public class ApplicationConfiguration {
      * Также можно активировать профайл через контекст (тут надо смотреть ApplicationRunner.class).
      * Лучше всего вызывать profile из application.properties!!!
      */
-
-    @Bean
-    @Profile("prod | web") //тут можно использовать логические операторы ! (не), & (и), | (или)
-    public UserRepository userRepository2(ConnectionPool pool2) {
-        return new UserRepository(pool2);
-    }
-
-    /**
-     * Также заинжектить бин мы можем просто обратившись к методу, который создает нам бин. Такое сработает только, если есть бины и они
-     * зависят друг от друга.
-     */
-    @Bean
-    public UserRepository userRepository3() {
-        return new UserRepository(pool3());
-    }
 }

@@ -1,19 +1,24 @@
 package com.spring.database.repository;
 
-import com.spring.database.pool.ConnectionPool;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Repository;
+import com.spring.database.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-@Repository
-@RequiredArgsConstructor
-public class UserRepository {
+import java.util.List;
+
+public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
-     * Здесь аннотация @Qualifier("pool2") указывает какой именно ConnectionPool необходимо использовать. В данном случае используется
-     * бин из ApplicationConfiguration.class
+     * В этом запросе мы используем HQL
+     */
+    @Query("select u from User u where u.firstname like %:firstname% and u.lastname like %:lastname%")
+    List<User> findAllBy(String firstname, String lastname);
+
+    /**
+     * Запрос ниже использует нативный SQL!!!
      */
 
-    @Qualifier("pool2")
-    private final ConnectionPool connectionPool;
+    @Query(value = "SELECT u.* FROM users u WHERE u.username = :username",
+            nativeQuery = true)
+    List<User> findAllByUsername(String username);
 }

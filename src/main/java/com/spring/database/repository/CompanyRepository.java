@@ -2,6 +2,7 @@ package com.spring.database.repository;
 
 import com.spring.database.entity.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -21,7 +22,11 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
     /**
      * Этот метод фактически поставляется нам из коробки. ЕГо просто надо написать как ниже и все заведется.
      * Аннотация @Param необходима, чтобы правильно сматчить поле класса со значением в запросе у аннотации @NamedQuery в классе Company
+     * <p>
+     * Вместо @NamedQuery над классом Company, мы можем использовать @Query прямо над методом, чтобы прикрутить новый запрос и заменить
+     * им уже существующий запрос по умолчанию.
      */
+    @Query("select c from Company c join fetch c.locales cl where c.name = :name2")
     Optional<Company> findByName(@Param("name2") String name);
 
     /**
