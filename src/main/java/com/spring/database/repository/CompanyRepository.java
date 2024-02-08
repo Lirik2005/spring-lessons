@@ -2,6 +2,7 @@ package com.spring.database.repository;
 
 import com.spring.database.entity.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,12 +20,14 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
 
     /**
      * Этот метод фактически поставляется нам из коробки. ЕГо просто надо написать как ниже и все заведется.
+     * Аннотация @Param необходима, чтобы правильно сматчить поле класса со значением в запросе у аннотации @NamedQuery в классе Company
      */
-    Optional<Company> findByName(String name);
+    Optional<Company> findByName(@Param("name2") String name);
 
     /**
      * Метод ниже также поставляется нам из коробки и позволит нам вернуть List компаний по части их названия. ЕГо просто надо написать как
      * ниже и все заведется.
+     * Однако в таком случае, название метода получается довольно большим и громоздким, что не есть хорошо.
      */
     List<Company> findALlByNameContainingIgnoreCase(String fragment);
 }
