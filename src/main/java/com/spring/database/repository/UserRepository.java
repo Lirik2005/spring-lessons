@@ -2,7 +2,9 @@ package com.spring.database.repository;
 
 import com.spring.database.entity.Role;
 import com.spring.database.entity.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -56,7 +58,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findTop3ByBirthDateBefore(LocalDate birthDate, Sort sort);
 
     /**
-     * Метод ниже принимает в себя Pageable. Описание смотри в UserRepositoryTest.
+     * Метод ниже принимает в себя Pageable. Описание смотри в UserRepositoryTest. В возвращаемом типе мы можем вместо List использовать
+     * Slice, который нам предоставляет Spring
+     * Вместо Slice также можно использовать Page (наследуется от Slice). В нем есть методы getTotalElements и getTotalCount, которые
+     * могут показать нам сколько всего есть страниц по заданному условию.
+     * С помощью @Query мы также можем изменить дефолтное поведение counter.
      */
-    List<User> findAllBy(Pageable pageable);
+
+    @Query(value = "select u from User u", countQuery = "select count(distinct u.firstname) from User u")
+    Page<User> findAllBy(Pageable pageable);
 }

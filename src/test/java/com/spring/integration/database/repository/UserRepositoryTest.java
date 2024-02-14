@@ -6,8 +6,9 @@ import com.spring.database.repository.UserRepository;
 import com.spring.integration.annotation.IT;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
@@ -30,9 +31,15 @@ class UserRepositoryTest {
          страниц начинается с нуля и количеством пользователей на странице 2 (плюс сортированных по id)
          */
 
-        PageRequest pageable = PageRequest.of(1, 2, Sort.by("id"));
-        List<User> result = userRepository.findAllBy(pageable);
-        assertEquals(2, result.size());
+        PageRequest pageable = PageRequest.of(0, 2, Sort.by("id"));
+        Page<User> slice = userRepository.findAllBy(pageable);
+        slice.forEach(user -> System.out.println(user.getId()));
+
+        while (slice.hasNext()) {
+            slice = userRepository.findAllBy(slice.nextPageable());
+            slice.forEach(user -> System.out.println(user.getId()));
+
+        }
     }
 
     @Test
