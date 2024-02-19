@@ -8,9 +8,13 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +59,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     /**
      * Метод ниже выведет трех пользователей с конца. Также мы можем передать в метод параметр Sort, который позволит нам делать
      * динамическую сортировку
+     * Аннотация @Lock позволяет нам устанавливать пессимистические или оптимистические блокировки на уровне строк
+     * Аннотация @QueryHints используется для дополнительной оптимизации нашего запроса (изменить тайм-аут, использовать кэширование
+     * запроса)
      */
+
+    @QueryHints(@QueryHint(name = "org.hibernate.fetchSize", value = "50"))
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     List<User> findTop3ByBirthDateBefore(LocalDate birthDate, Sort sort);
 
     /**
