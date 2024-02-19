@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -63,8 +64,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * Вместо Slice также можно использовать Page (наследуется от Slice). В нем есть методы getTotalElements и getTotalCount, которые
      * могут показать нам сколько всего есть страниц по заданному условию.
      * С помощью @Query мы также можем изменить дефолтное поведение counter.
+     * <p>
+     * Аннотация @EntityGraph("User.company") позволяет нам сделать join с таблицей Company (смотри сущность User)
+     * Однако лучше использовать другой атрибут: attribute path, но тут будут некорректно работать Pageable
      */
 
+//    @EntityGraph("User.company")
+    @EntityGraph(attributePaths = {"company", "company.locales"})
     @Query(value = "select u from User u", countQuery = "select count(distinct u.firstname) from User u")
     Page<User> findAllBy(Pageable pageable);
 }
