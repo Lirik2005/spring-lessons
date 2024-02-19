@@ -3,12 +3,13 @@ package com.spring.integration.database.repository;
 import com.spring.database.entity.Role;
 import com.spring.database.entity.User;
 import com.spring.database.repository.UserRepository;
+import com.spring.dto.PersonalInfo;
+import com.spring.dto.PersonalInfo2;
 import com.spring.integration.annotation.IT;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
@@ -23,6 +24,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class UserRepositoryTest {
 
     private final UserRepository userRepository;
+
+    @Test
+    void checkProjections() {
+        List<PersonalInfo2> users = userRepository.findAllByCompanyId(1);
+        assertEquals(2, users.size());
+    }
 
     @Test
     void checkPageable() {

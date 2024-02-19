@@ -2,6 +2,8 @@ package com.spring.database.repository;
 
 import com.spring.database.entity.Role;
 import com.spring.database.entity.User;
+import com.spring.dto.PersonalInfo;
+import com.spring.dto.PersonalInfo2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -83,4 +85,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @EntityGraph(attributePaths = {"company", "company.locales"})
     @Query(value = "select u from User u", countQuery = "select count(distinct u.firstname) from User u")
     Page<User> findAllBy(Pageable pageable);
+
+    /**
+     * Метод ниже вернет нам нашу проекцию. При этом, мы мужем использовать здесь дженерик-тип
+     */
+//    List<PersonalInfo> findAllByCompanyId(Integer companyId);
+//   <T> List<T> findAllByCompanyId(Integer companyId, Class<T> clazz);
+
+    /**
+     * Так как в birthDate у нас расхождение с базой данных в именовании (в базе это у нас birth_date), мы делаем обычный алиас birthDate.
+     * Теперь у нас все полностью соответствует
+     */
+    @Query(value = "SELECT firstname, lastname, birth_date birthDate FROM users WHERE company_id = :companyId",
+            nativeQuery = true)
+    List<PersonalInfo2> findAllByCompanyId(Integer companyId);
 }
