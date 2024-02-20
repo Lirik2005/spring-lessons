@@ -3,8 +3,8 @@ package com.spring.integration.database.repository;
 import com.spring.database.entity.Role;
 import com.spring.database.entity.User;
 import com.spring.database.repository.UserRepository;
-import com.spring.dto.PersonalInfo;
 import com.spring.dto.PersonalInfo2;
+import com.spring.dto.UserFilter;
 import com.spring.integration.annotation.IT;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -24,6 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class UserRepositoryTest {
 
     private final UserRepository userRepository;
+
+    @Test
+    void checkCustomImplementation() {
+        UserFilter filter = new UserFilter(null, "%ov%", LocalDate.now());
+        List<User> users = userRepository.findAllByFilter(filter);
+        System.out.println();
+    }
 
     @Test
     void checkProjections() {
