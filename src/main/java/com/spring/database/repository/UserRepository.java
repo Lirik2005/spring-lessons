@@ -2,11 +2,9 @@ package com.spring.database.repository;
 
 import com.spring.database.entity.Role;
 import com.spring.database.entity.User;
-import com.spring.dto.PersonalInfo;
 import com.spring.dto.PersonalInfo2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +12,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
+import org.springframework.data.repository.history.RevisionRepository;
 
 import javax.persistence.LockModeType;
 import javax.persistence.QueryHint;
@@ -21,7 +20,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long>, FilterUserRepository {
+/**
+ * Интерфейс RevisionRepository позволит нам получать соответствующие данные из таблицы
+ */
+
+public interface UserRepository extends JpaRepository<User, Long>, FilterUserRepository, RevisionRepository<User, Long, Integer> {
 
     /**
      * В этом запросе мы используем HQL
