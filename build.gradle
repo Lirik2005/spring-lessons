@@ -3,6 +3,7 @@ plugins {
     id "io.spring.dependency-management" version '1.0.11.RELEASE'
     id "io.freefair.lombok" version "6.3.0"
     id 'java'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" //используется чтобы юзать Querydsl
 }
 
 group 'org.example'
@@ -12,13 +13,34 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    querydsl.extendsFrom annotationProcessor, implementation, compileOnly, runtimeOnly //используется чтобы юзать Querydsl
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.postgresql:postgresql'
-    implementation 'org.springframework.data:spring-data-envers'
+    implementation 'org.springframework.data:spring-data-envers' //используется для отслеживания ревизий
+    implementation 'com.querydsl:querydsl-jpa' //используется чтобы юзать Querydsl
+
+    annotationProcessor 'com.querydsl:querydsl-apt' //используется чтобы юзать Querydsl
+
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+//используется чтобы юзать Querydsl. Чтобы все заработало надо выполнить таску build -> classes и зайти в пакет build, найти QUsers и там
+//подтянуть импорты
+querydsl {
+    jpa = true
+    library = 'com.querydsl:querydsl-apt:5.0.0'
+    querydslSourcesDir = "$buildDir/generated/sources/annotationProcessor/java/main"
+}
+
+//используется чтобы юзать Querydsl
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
 }
 
 test {

@@ -1,16 +1,18 @@
 package com.spring.database.repository;
 
+import com.querydsl.core.types.Predicate;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.spring.database.entity.QUser;
 import com.spring.database.entity.User;
+import com.spring.database.querydsl.QPredicates;
 import com.spring.dto.UserFilter;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.spring.database.entity.QUser.user;
+
 
 /**
  * Класс реализует интерфейс FilterUserRepository. Он должен называться так же как интерфейс и иметь приставку Impl
@@ -25,25 +27,16 @@ public class FilterUserRepositoryImpl implements FilterUserRepository {
      */
     @Override
     public List<User> findAllByFilter(UserFilter filter) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<User> criteria = cb.createQuery(User.class);
+        Predicate predicate = QPredicates.builder()
+                                         .add(filter.firstname(), user.firstname::containsIgnoreCase)
+                                         .add(filter.lastname(), user.lastname::containsIgnoreCase)
+                                         .add(filter.birthDate(), user.birthDate::before)
+                                         .build();
+        return new JPAQuery<User>(entityManager)
+                .select(user)
+                .from(user)
+                .where(predicate)
+                .fetch();
 
-        Root<User> user = criteria.from(User.class);
-        criteria.select(user);
-
-        List<Predicate> predicates = new ArrayList<>();
-        if (filter.firstname() != null) {
-            predicates.add(cb.like(user.get("firstname"), filter.firstname()));
-        }
-        if (filter.lastname() != null) {
-            predicates.add(cb.like(user.get("lastname"), filter.lastname()));
-        }
-        if (filter.birthDate() != null) {
-            predicates.add(cb.lessThan(user.get("birthDate"), filter.birthDate()));
-        }
-
-        criteria.where(predicates.toArray(Predicate[]::new));
-
-        return entityManager.createQuery(criteria).getResultList();
     }
 }

@@ -37,9 +37,9 @@ class UserRepositoryTest {
 
     @Test
     void checkCustomImplementation() {
-        UserFilter filter = new UserFilter(null, "%ov%", LocalDate.now());
+        UserFilter filter = new UserFilter(null, "ov", LocalDate.now());
         List<User> users = userRepository.findAllByFilter(filter);
-        System.out.println();
+        assertEquals(4, users.size());
     }
 
     @Test

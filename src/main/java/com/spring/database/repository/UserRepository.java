@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.history.RevisionRepository;
 
 import javax.persistence.LockModeType;
@@ -22,9 +23,14 @@ import java.util.Optional;
 
 /**
  * Интерфейс RevisionRepository позволит нам получать соответствующие данные из таблицы
+ * Чтобы не писать кастомные реализации в RevisionRepository для querydsl нам достаточно реализовать QuerydslPredicateExecutor
  */
 
-public interface UserRepository extends JpaRepository<User, Long>, FilterUserRepository, RevisionRepository<User, Long, Integer> {
+public interface UserRepository extends
+        JpaRepository<User, Long>,
+        FilterUserRepository,
+        RevisionRepository<User, Long, Integer>,
+        QuerydslPredicateExecutor<User> {
 
     /**
      * В этом запросе мы используем HQL
