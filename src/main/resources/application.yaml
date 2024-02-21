@@ -44,6 +44,7 @@ logging:
   level:
     root: INFO
     com.spring.database.pool.ConnectionPool: INFO
+    org.springframework.jdbc.core: TRACE
   file:
     name: testLog.log
     path: /

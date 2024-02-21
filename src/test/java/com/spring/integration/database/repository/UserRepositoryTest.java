@@ -3,6 +3,7 @@ package com.spring.integration.database.repository;
 import com.spring.database.entity.Role;
 import com.spring.database.entity.User;
 import com.spring.database.repository.UserRepository;
+import com.spring.dto.PersonalInfo;
 import com.spring.dto.PersonalInfo2;
 import com.spring.dto.UserFilter;
 import com.spring.integration.annotation.IT;
@@ -25,6 +26,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class UserRepositoryTest {
 
     private final UserRepository userRepository;
+
+    @Test
+    void checkJdbcTemplate() {
+        List<PersonalInfo> users = userRepository.findAllByCompanyIdAndRole(1, Role.USER);
+        assertEquals(1, users.size());
+    }
 
     @Test
     @Commit
