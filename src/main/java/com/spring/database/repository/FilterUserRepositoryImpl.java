@@ -2,7 +2,6 @@ package com.spring.database.repository;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQuery;
-import com.spring.database.entity.QUser;
 import com.spring.database.entity.Role;
 import com.spring.database.entity.User;
 import com.spring.database.querydsl.QPredicates;
@@ -10,12 +9,12 @@ import com.spring.dto.PersonalInfo;
 import com.spring.dto.UserFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.persistence.EntityManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import static com.spring.database.entity.QUser.user;
 
@@ -36,6 +35,20 @@ public class FilterUserRepositoryImpl implements FilterUserRepository {
             AND role = ?
             """;
 
+    private static final String UPDATE_COMPANY_AND_ROLE = """
+            UPDATE  users
+            SET company_id = ?,
+                role = ?
+            WHERE id = ?
+             """;
+
+    private static final String UPDATE_COMPANY_AND_ROLE_NAMED = """
+            UPDATE  users
+            SET company_id = :companyId,
+                role = :role
+            WHERE id = :id
+             """;
+
     private final EntityManager entityManager;
 
     /**
@@ -43,6 +56,12 @@ public class FilterUserRepositoryImpl implements FilterUserRepository {
      */
 
     private final JdbcTemplate jdbcTemplate;
+
+    /**
+     * Бин ниже нужен для работы и именованными запросами
+     */
+
+    private final NamedParameterJdbcTemplate namedJdbcTemplate;
 
     /**
      * Метод выбирает нам юзеров, исходя из фильтра.
@@ -69,5 +88,26 @@ public class FilterUserRepositoryImpl implements FilterUserRepository {
                                                        rs.getString("lastname"),
                                                        rs.getDate("birth_date").toLocalDate()
                                   ), companyId, role.name());
+    }
+
+    @Override
+    public void updateCompanyAndRole(List<User> users) {
+        List<Object[]> args = users.stream()
+                                   .map(user -> new Object[]{user.getCompany().getId(), user.getRole().name(), user.getId()})
+                                   .toList();
+        jdbcTemplate.batchUpdate(UPDATE_COMPANY_AND_ROLE, args);
+    }
+
+    @Override
+    public void updateCompanyAndRoleNamed(List<User> users) {
+        MapSqlParameterSource[] args = users.stream()
+                                            .map(user -> Map.of("companyId", user.getCompany().getId(),
+                                                                "role", user.getRole().name(),
+                                                                "id", user.getId()
+                                            ))
+                                            .map(MapSqlParameterSource::new)
+                                            .toArray(MapSqlParameterSource[]::new);
+
+        namedJdbcTemplate.batchUpdate(UPDATE_COMPANY_AND_ROLE_NAMED, args);
     }
 }
