@@ -25,6 +25,7 @@ dependencies {
     implementation 'org.postgresql:postgresql'
     implementation 'org.springframework.data:spring-data-envers' //используется для отслеживания ревизий
     implementation 'com.querydsl:querydsl-jpa' //используется чтобы юзать Querydsl
+    implementation 'org.liquibase:liquibase-core' // используется для миграции базы данных
 
     annotationProcessor 'com.querydsl:querydsl-apt' //используется чтобы юзать Querydsl
 
