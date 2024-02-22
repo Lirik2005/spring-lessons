@@ -21,8 +21,12 @@ database:
 
 spring.profiles.active: qa
 
-# Тут мы передаем настройки для работы с базой данных
+# Тут мы передаем настройки для работы с базой данных и mvc
 spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp
+      suffix: .jsp
   datasource:
     url: jdbc:postgresql://localhost:5433/postgres
     username: postgres
