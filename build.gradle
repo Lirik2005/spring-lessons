@@ -28,6 +28,7 @@ dependencies {
 
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'com.h2database:h2' //inMemory database, чтобы использовать в тестах
 }
 
 //используется чтобы юзать Querydsl. Чтобы все заработало надо выполнить таску build -> classes и зайти в пакет build, найти QUsers и там

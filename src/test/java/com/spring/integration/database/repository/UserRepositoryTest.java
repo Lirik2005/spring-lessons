@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Commit;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,8 +22,16 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Аннотация @Sql нам нужна, чтобы накатить наши тестовые данные (SQL-скрипты с нашими компаниями, пользователями и так далее) в
+ * свежесозанную
+ * тестовую базу данных Н2
+ */
 @IT
 @RequiredArgsConstructor
+@Sql({
+        "classpath:sql/data.sql"
+})
 class UserRepositoryTest {
 
     private final UserRepository userRepository;
