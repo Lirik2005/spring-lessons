@@ -6,14 +6,13 @@ import com.spring.database.repository.UserRepository;
 import com.spring.dto.PersonalInfo;
 import com.spring.dto.PersonalInfo2;
 import com.spring.dto.UserFilter;
-import com.spring.integration.annotation.IT;
+import com.spring.integration.IntegrationTestBase;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,12 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * свежесозанную
  * тестовую базу данных Н2
  */
-@IT
+
 @RequiredArgsConstructor
-@Sql({
-        "classpath:sql/data.sql"
-})
-class UserRepositoryTest {
+class UserRepositoryTest extends IntegrationTestBase {
 
     private final UserRepository userRepository;
 
@@ -50,7 +46,6 @@ class UserRepositoryTest {
     }
 
     @Test
-    @Commit
     void checkAuditing() {
         User ivan = userRepository.findById(1L).get();
         ivan.setBirthDate(ivan.getBirthDate().plusYears(1));
@@ -108,7 +103,7 @@ class UserRepositoryTest {
          * Сортировку можно делать сложной как в примере ниже
          */
 
-        List<User> sortByName = userRepository.findTop3ByBirthDateBefore(LocalDate.now(), Sort.by("firstName").and(Sort.by("lastName")));
+        List<User> sortByName = userRepository.findTop3ByBirthDateBefore(LocalDate.now(), Sort.by("firstname").and(Sort.by("lastname")));
         assertEquals(3, sortByName.size());
 
         List<User> sortById = userRepository.findTop3ByBirthDateBefore(LocalDate.now(), Sort.by("id").descending());

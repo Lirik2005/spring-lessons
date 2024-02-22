@@ -6,6 +6,8 @@ plugins {
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" //используется чтобы юзать Querydsl
 }
 
+apply from: 'version.gradle'
+
 group 'org.example'
 version '1.0-SNAPSHOT'
 
@@ -28,14 +30,16 @@ dependencies {
 
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'com.h2database:h2' //inMemory database, чтобы использовать в тестах
+
+    //нужно чтобы поднимать в тестах базу данных полностью идентичную боевой
+    testImplementation "org.testcontainers:postgresql:${versions.testcontainers}"
 }
 
 //используется чтобы юзать Querydsl. Чтобы все заработало надо выполнить таску build -> classes и зайти в пакет build, найти QUsers и там
 //подтянуть импорты
 querydsl {
     jpa = true
-    library = 'com.querydsl:querydsl-apt:5.0.0'
+    library = "com.querydsl:querydsl-apt:${versions.querydsl}"
     querydslSourcesDir = "$buildDir/generated/sources/annotationProcessor/java/main"
 }
 

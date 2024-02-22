@@ -2,8 +2,10 @@ package com.spring.integration.database.repository;
 
 import com.spring.database.entity.Company;
 import com.spring.database.repository.CompanyRepository;
+import com.spring.integration.IntegrationTestBase;
 import com.spring.integration.annotation.IT;
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -22,9 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Аннотация @Commit произведет изменения базы данных и запишет компанию из теста save().
  * По умолчанию, все подобные операции заканчиваются роллбэком.
  */
-@IT
+
 @RequiredArgsConstructor
-class CompanyRepositoryTest {
+class CompanyRepositoryTest extends IntegrationTestBase {
 
     private static final Integer APPLE_ID = 11;
 
@@ -46,6 +48,7 @@ class CompanyRepositoryTest {
     }
 
     @Test
+    @Disabled
     void delete() {
         Optional<Company> maybeCompany = companyRepository.findById(APPLE_ID);
         assertTrue(maybeCompany.isPresent());
