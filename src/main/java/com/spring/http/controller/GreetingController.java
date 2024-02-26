@@ -1,9 +1,12 @@
 package com.spring.http.controller;
 
+import com.spring.database.entity.Role;
 import com.spring.dto.UserReadDto;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Аннотация @Controller указывает на то, что наш класс это Spring Controller.
@@ -24,6 +29,11 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/v1")
 @SessionAttributes({"user"})
 public class GreetingController {
+
+    @ModelAttribute("roles")
+    public List<Role> roles() {
+        return Arrays.asList(Role.values());
+    }
 
     /**
      * Аннотация @RequestMapping позволяет нам смапить наш метод с конкретным URL и указать HTTP-метод.
@@ -37,15 +47,16 @@ public class GreetingController {
      * написать @RequestParam Integer age
      * <p>
      * Аннотация @PathVariable нужна, чтобы подставлять переменные в гаш URL
+     * <p>
+     * Аннотация @ModelAttribute позволяет нам динамически заполнять нашего юзера. Более того, ее можно и не писать (и так работает)
      */
 //    @RequestMapping(value = "/hello", method = RequestMethod.GET)
     @GetMapping("/hello")
-    public ModelAndView hello(ModelAndView modelAndView, HttpServletRequest request) {
-        modelAndView.setViewName("greeting/hello");
+    public String hello(Model model, HttpServletRequest request, @ModelAttribute("userReadDto") UserReadDto userReadDto) {
 
-        modelAndView.addObject("user", new UserReadDto(1L, "Ivan"));
+        model.addAttribute("user", new UserReadDto(1L, "Ivan"));
 
-        return modelAndView;
+        return "greeting/hello";
     }
 
     /**
@@ -54,19 +65,17 @@ public class GreetingController {
      */
 
     @GetMapping("/bye")
-    public ModelAndView bye(@SessionAttribute("user") UserReadDto user) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("greeting/bye");
+    public String bye(@SessionAttribute("user") UserReadDto user, Model model) {
 
-        return modelAndView;
+        return "greeting/bye";
     }
 
     @GetMapping("/hello/{id}")
     public ModelAndView hello2(ModelAndView modelAndView,
-                              @RequestParam("age") Integer age,
-                              @RequestHeader("accept") String accept,
-                              @CookieValue("JSESSIONID") String jsessionId,
-                              @PathVariable("id") Integer id) {
+                               @RequestParam("age") Integer age,
+                               @RequestHeader("accept") String accept,
+                               @CookieValue("JSESSIONID") String jsessionId,
+                               @PathVariable("id") Integer id) {
         modelAndView.setViewName("greeting/hello");
 
         return modelAndView;
