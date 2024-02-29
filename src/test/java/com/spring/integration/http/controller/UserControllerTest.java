@@ -1,6 +1,5 @@
 package com.spring.integration.http.controller;
 
-import com.spring.dto.UserCreateEditDto;
 import com.spring.integration.IntegrationTestBase;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -52,11 +51,17 @@ class UserControllerTest extends IntegrationTestBase {
                                 .param(lastname, "TestTest")
                                 .param(role, "ADMIN")
                                 .param(companyId, "1")
-                                .param(birthDate, "2000-01-01") // как тут конвертировать будет в следующей ветке
-        )
-                .andExpectAll(
-                        status().is3xxRedirection(),
-                        redirectedUrlPattern("/users/*")
-                );
+                                /**
+                                 * Чтобы заработала конвертация из строки в дату, мы можем в application.yaml добавить format.date: iso
+                                 * Также можно использовать аннотацию (см. класс UserCreateEditDto)
+                                 * Или самое крутое это сделать конфигурацию (см. класс WebConfiguration)
+                                 * Сейчас работает именно конфигурация
+                                 */
+                                .param(birthDate, "2000-01-01")
+               )
+               .andExpectAll(
+                       status().is3xxRedirection(),
+                       redirectedUrlPattern("/users/*")
+               );
     }
 }
