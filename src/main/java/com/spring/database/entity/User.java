@@ -42,7 +42,7 @@ public class User implements BaseEntity<Long> {
 
     private String lastname;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) // делает String из Enum
     private Role role;
 
     @ManyToOne(fetch = FetchType.LAZY)
