@@ -5,6 +5,7 @@ import com.spring.database.repository.CompanyRepository;
 import com.spring.integration.annotation.IT;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.EntityManager;
@@ -24,9 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @IT
 @RequiredArgsConstructor
+@Commit
 class CompanyRepositoryTest {
 
-    private static final Integer APPLE_ID = 11;
+    private static final Integer APPLE_ID = 8;
 
     private final EntityManager entityManager;
 
